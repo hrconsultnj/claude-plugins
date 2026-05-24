@@ -1,6 +1,6 @@
 {
   "_comment_no_fetch_hook": "Implementation note: do not add PostToolUse hooks matching 'mcp__.*composure_fetch_.*'. Hooks emitting 'updatedMCPToolOutput' on these tools interfere with the intended tool result rendering. If you need to transform fetch results, do it inside the tool handler in enforce/src/server.ts instead.",
-  "_comment_defensive_wrapper": "Every command uses the defensive pattern: `test -d \"${CLAUDE_PLUGIN_ROOT}\" && bash \"...\" 2>/dev/null; exit 0`. This guarantees silent no-op when the plugin cache dir was cleaned up mid-session (anthropics/claude-code#14061, #29074, #13799, #15642, #18426). stderr is redirected to /dev/null so no 'hook error' transcript notices appear. The trailing `; exit 0` always runs because it follows a semicolon, not `&&`, so the command's final exit code is always 0 regardless of what came before. Blocking hooks (code-enforcement.mjs) use a variant that captures stderr to a temp file and ONLY replays it on exit 2 — this preserves the no-noise policy on pass while surfacing the structured violation message Claude needs to actually fix the block.",
+  "_comment_defensive_wrapper": "Every command uses the defensive pattern: `test -d \"${CLAUDE_PLUGIN_ROOT}\" && bash \"...\" 2>/dev/null; exit 0`. This guarantees silent no-op when the plugin cache dir was cleaned up mid-session (anthropics/claude-code#14061, #29074, #13799, #15642, #18426). stderr is redirected to /dev/null so no 'hook error' transcript notices appear. The trailing `; exit 0` always runs because it follows a semicolon, not `&&`, so the command's final exit code is always 0 regardless of what came before. code-enforcement.mjs preserves exit 2 semantics for hard-rule blocking via an inline $EC check.",
   "hooks": {
     "SessionStart": [
       {
@@ -72,7 +72,7 @@
           },
           {
             "type": "command",
-            "command": "test -d \"${CLAUDE_PLUGIN_ROOT}\" || exit 0; ERR=$(mktemp -t composure-enf); node \"${CLAUDE_PLUGIN_ROOT}/hooks/enforcement/code-enforcement.mjs\" 2>\"$ERR\"; EC=$?; [ $EC -eq 2 ] && cat \"$ERR\" >&2; rm -f \"$ERR\"; [ $EC -eq 2 ] && exit 2; exit 0",
+            "command": "test -d \"${CLAUDE_PLUGIN_ROOT}\" || exit 0; node \"${CLAUDE_PLUGIN_ROOT}/hooks/enforcement/code-enforcement.mjs\" 2>/dev/null; EC=$?; [ $EC -eq 2 ] && exit 2; exit 0",
             "timeout": 5,
             "statusMessage": "Enforcing code rules..."
           }
