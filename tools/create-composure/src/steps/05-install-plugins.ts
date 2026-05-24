@@ -9,6 +9,7 @@
 
 import { commandExists, execSafe } from "../lib/exec.js";
 import { logger } from "../lib/logger.js";
+import { ensureComposureSuiteAutoUpdate } from "../lib/enable-marketplace-autoupdate.js";
 
 const DEFAULT_PLUGINS = ["composure", "sentinel", "shipyard", "testbench", "design-forge"];
 
@@ -98,6 +99,18 @@ export async function installPlugins(options: {
     "plugin", "marketplace", "add", "hrconsultnj/claude-plugins",
     "--sparse", ".claude-plugin", "plugins",
   ]);
+
+  // Turn on autoUpdate for composure-suite so future plugin.json version bumps
+  // roll out automatically at session start. Claude Code defaults third-party
+  // marketplaces to autoUpdate=false; this is the install-time fix. A runtime
+  // self-heal in composure-freshness.sh covers the case where the file gets
+  // reset later.
+  const autoUpdateResult = await ensureComposureSuiteAutoUpdate();
+  if (autoUpdateResult === "enabled") {
+    logger.success("Enabled auto-update for composure-suite marketplace");
+  }
+  // Other return values ("already-on", "no-marketplace", "skipped", "error")
+  // are intentionally silent — they're either no-ops or already logged.
 
   // Migration: detect old @my-claude-plugins references
   const hasLegacyMarketplace = [...currentPlugins.keys()].some(k => k.includes("@my-claude-plugins"));

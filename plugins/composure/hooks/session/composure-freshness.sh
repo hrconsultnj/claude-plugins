@@ -36,6 +36,32 @@ COMPOSURE_HOME="${HOME}/.composure"
 MANIFEST="${COMPOSURE_HOME}/manifest.json"
 AUTOUPDATE_STAMP="${COMPOSURE_HOME}/last-autoupdate-check"
 FRESHNESS_STAMP="${COMPOSURE_HOME}/last-freshness-check"
+KNOWN_MARKETPLACES="${HOME}/.claude/plugins/known_marketplaces.json"
+
+# ── 0b. Marketplace autoUpdate self-heal ──────────────────────
+# Claude Code defaults third-party marketplaces to autoUpdate=false. We set
+# this at install time in create-composure, but the file is user-editable —
+# someone may have overwritten it, or a different install path may have
+# registered composure-suite without the flag. Enforce idempotently here so
+# every session start guarantees auto-update is on.
+#
+# Only acts when the marketplace IS registered (silently skipped if not).
+# Atomic write via tmp+mv to avoid leaving half-written JSON if Claude Code
+# reads concurrently. Fail-open: any error is silent (don't break boot for
+# a config self-heal).
+if [ -f "$KNOWN_MARKETPLACES" ] && command -v jq >/dev/null 2>&1; then
+  if jq -e '."composure-suite"' "$KNOWN_MARKETPLACES" >/dev/null 2>&1; then
+    if [ "$(jq -r '."composure-suite".autoUpdate // false' "$KNOWN_MARKETPLACES" 2>/dev/null)" != "true" ]; then
+      tmp="${KNOWN_MARKETPLACES}.tmp.$$"
+      if jq '."composure-suite".autoUpdate = true' "$KNOWN_MARKETPLACES" > "$tmp" 2>/dev/null && [ -s "$tmp" ]; then
+        mv "$tmp" "$KNOWN_MARKETPLACES" 2>/dev/null && \
+          echo "[composure:autoupdate] enabled auto-update for composure-suite marketplace (one-time)"
+      else
+        rm -f "$tmp" 2>/dev/null
+      fi
+    fi
+  fi
+fi
 
 # ── 0a. Reachability probes ────────────────────────────────────
 # When the agent can't reach Composure, every other step downstream of
