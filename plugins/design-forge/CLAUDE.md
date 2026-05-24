@@ -15,8 +15,11 @@ design-forge/
 │   │   └── references/          # 7 reference guides (~3,000 lines total)
 │   ├── product-planner/
 │   │   └── SKILL.md             # Product planning: personas, journeys, screens, features
-│   └── ux-researcher/
-│       └── SKILL.md             # Research skill: web search, competitor analysis, tech evaluation
+│   ├── ux-researcher/
+│   │   └── SKILL.md             # UX research: design patterns, tech evaluation, industry standards
+│   └── market-researcher/
+│       ├── SKILL.md             # Market research: competitor features, pricing, positioning, gaps
+│       └── steps/               # 5-step workflow mirroring ux-researcher shape
 ├── components/
 │   ├── visualizations/canvas/   # GenerativeCanvas, useCanvas, hooks, signal noise
 │   ├── visualizations/presets/  # grid-field, particle-system, point-cloud, orbital-ellipses
