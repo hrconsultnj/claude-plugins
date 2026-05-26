@@ -1,26 +1,32 @@
 # Claude Code Plugins
 
-> ## ⚠️ This repo has been absorbed into [composure-pro](https://github.com/hrconsultnj/composure-pro)
+> ## ⚠️ This is the legacy install URL for the Composure plugin suite
 >
-> As of **2026-05-17**, this repo (claude-plugins) is the prior canonical source for the Composure plugin suite. It has been merged into [composure-pro](https://github.com/hrconsultnj/composure-pro), which is now the single source-of-truth for:
-> - All 5 plugin source trees (composure, design-forge, sentinel, shipyard, testbench)
-> - The marketplace manifest (`.claude-plugin/marketplace.json`)
-> - All hooks, agents, binaries, MCP servers, skills
-> - The pro-patterns content catalog (which always lived in composure-pro)
+> As of **2026-05-17**, this repo is no longer the canonical source for Composure. It remains the **public-facing entry point** — the README, marketplace shell, and install pointers that older URLs and bookmarks still hit. The plugin's source, hooks, MCP servers, and pro-patterns catalog live in a separate maintained repo.
 >
-> **For existing users**: nothing breaks immediately — this repo's `marketplace.json` keeps the same `composure-suite` name and relative `./plugins/<name>` source paths, so existing installs continue to work. But future updates only land in composure-pro.
+> **For existing users**: nothing breaks. This repo's `marketplace.json` keeps the same `composure-suite` name and relative install paths, so existing setups continue to work. But future updates only ship through the install/sync flow below.
 >
-> **To migrate** (recommended):
+> **Install or update — one command** (open a terminal):
+> ```
+> pnpm dlx create-composure
+> ```
+> The same command handles fresh installs AND updates. It runs OAuth login if needed, points at the current marketplace, and triggers a full sync — credentials, hooks, and config land current in one pass. Curl / PowerShell installers at [composure-pro.com](https://composure-pro.com) do the same thing.
+>
+> **Already inside Claude Code?** You can migrate without leaving the session:
+> ```
+> /composure:account login   # if you haven't logged in yet
+> /composure:sync            # switches your marketplace pointer + refreshes everything
+> ```
+> The `/composure:sync` skill (v1.50+) brings credentials, marketplace pointer, plugin versions, hooks, and config current in one pass. The marketplace name stays `composure-suite` so existing plugin install paths don't change.
+>
+> **Manual migration (fallback)** if you can't run the sync skill:
 > ```
 > /plugin marketplace remove hrconsultnj/claude-plugins
 > /plugin marketplace add hrconsultnj/composure-pro
 > /plugin install composure@composure-suite
 > ```
-> The marketplace name stays `composure-suite` so plugin install paths don't change.
 >
-> **Background**: see [`composure-consolidation-2026-05-17.md`](https://github.com/hrconsultnj/composure-pro/blob/main/tasks-plans/blueprints/composure-consolidation-2026-05-17.md) for the full rationale (Wave A → Wave B repo collapse).
->
-> This repo will be archived once existing installs have migrated.
+> This repo will be archived once existing installs have migrated through the install/sync flow above.
 
 ---
 
