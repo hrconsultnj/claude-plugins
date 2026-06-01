@@ -1,0 +1,101 @@
+name: Contribution Triage
+
+# Sorts incoming PRs and issues by type and posts the routing guidance from
+# CONTRIBUTING.md. It NEVER ports or merges anything and NEVER checks out or
+# runs PR code — it only reads metadata (changed-file paths) and writes a
+# label + a comment. That is why pull_request_target is safe here: no fork
+# code is executed, so the elevated (write) token is not exposed to untrusted code.
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+  issues:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+  issues: write
+  contents: read
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const SHELL = [
+              /^README(\.md)?$/i, /^CONTRIBUTING\.md$/i, /^CODEOWNERS$/,
+              /^LICENSE$/, /^COMMERCIAL-LICENSE\.md$/i, /^PRIVACY\.md$/i,
+              /^\.gitignore$/, /^use-cases\//, /^assets\//, /^docs\//, /^\.github\//,
+            ];
+            const isShell = (f) => SHELL.some((re) => re.test(f));
+
+            async function ensureLabel(name, color, description) {
+              try {
+                await github.rest.issues.getLabel({ ...context.repo, name });
+              } catch (e) {
+                if (e.status === 404) {
+                  await github.rest.issues.createLabel({ ...context.repo, name, color, description });
+                }
+              }
+            }
+            async function addLabels(number, labels) {
+              await github.rest.issues.addLabels({ ...context.repo, issue_number: number, labels });
+            }
+            async function comment(number, body) {
+              await github.rest.issues.createComment({ ...context.repo, issue_number: number, body });
+            }
+
+            await ensureLabel('shell-content', '0e8a16', 'PR touches only public-shell content (README, use-cases, docs)');
+            await ensureLabel('needs-issue',   'd93f0b', 'Code/behavior change — belongs as an issue, source lives in composure-pro');
+            await ensureLabel('stale-structure','fbca04', 'PR predates the lean-shell restructure (targets the old full tree)');
+            await ensureLabel('triage',         'c5def5', 'Awaiting maintainer triage');
+
+            // ── ISSUE PATH ──────────────────────────────────────────────
+            if (context.eventName === 'issues') {
+              const n = context.payload.issue.number;
+              await addLabels(n, ['triage']);
+              await comment(n,
+                "Thanks for opening this! 🙏 A maintainer will triage it.\n\n" +
+                "If this is a **plugin / skill / hook / behavior** change, this issue is the right place — " +
+                "the source is maintained separately and the change ships via the next release. " +
+                "See [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md).");
+              return;
+            }
+
+            // ── PR PATH ─────────────────────────────────────────────────
+            const n = context.payload.pull_request.number;
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              ...context.repo, pull_number: n, per_page: 100,
+            });
+            const paths = files.map((f) => f.filename);
+            const nonShell = paths.filter((p) => !isShell(p));
+            const huge = paths.length > 50; // a focused shell PR is small; 50+ ⇒ likely stale full-tree
+
+            if (huge) {
+              await addLabels(n, ['stale-structure', 'needs-issue']);
+              await comment(n,
+                "👋 This PR changes **" + paths.length + " files**, which means it almost certainly targets the " +
+                "**old full-tree layout** (the repo is now a lean public shell). Please re-open against the current " +
+                "`main` for shell content, or file an **issue** for plugin/skill/hook changes. " +
+                "See [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md).");
+              return;
+            }
+
+            if (nonShell.length === 0) {
+              await addLabels(n, ['shell-content', 'triage']);
+              await comment(n,
+                "✅ Thanks! This looks like a **shell-content** PR (README / use-cases / docs). " +
+                "A maintainer will review it here.");
+            } else {
+              await addLabels(n, ['needs-issue']);
+              const list = nonShell.slice(0, 10).map((p) => "- `" + p + "`").join("\n");
+              await comment(n,
+                "👋 Thanks for contributing! This PR touches files outside the public shell:\n\n" + list +
+                (nonShell.length > 10 ? "\n- …and more" : "") + "\n\n" +
+                "**This repo holds no plugin source** — skills, hooks, and behavior live in a separately-maintained " +
+                "repo and ship via the payload, so a code PR here can't be merged into the product. " +
+                "Please **open an issue** describing the change; a maintainer ports it and it ships in the next release. " +
+                "See [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md). (Shell-only changes — README, use-cases, docs — are welcome as PRs.)");
+            }
