@@ -1,67 +1,21 @@
-## What kind of contribution is this?
+# Pull Request
 
-- [ ] **Framework pattern** — adding/updating patterns for a language (TypeScript, Python, Go, Rust, C/C++, Swift, Kotlin)
-- [ ] **New language support** — adding a new language framework
-- [ ] **Hook improvement** — updating enforcement rules, decomposition checks, or other hooks
-- [ ] **Skill enhancement** — improving an existing skill
-- [ ] **Bug fix**
-- [ ] **Other** (describe below)
+> **Before you open this:** PRs here are for **shell content only** — README, use-cases, docs, `.github/` templates. Changes to plugins, skills, hooks, or enforcement rules can't be merged here (the product source is maintained separately and ships via the payload). For those, please **open an issue** instead — see [CONTRIBUTING.md](../CONTRIBUTING.md). A code PR will be redirected to an issue.
 
-## Summary
+## What does this PR do?
 
-<!-- 1-3 sentences: what does this PR do and why? -->
+<!-- Brief description of the change -->
 
-## Framework Pattern Checklist
+## Type of change
 
-If contributing patterns to `skills/app-architecture/{lang}/references/universal/`:
+- [ ] README / docs
+- [ ] Use-case (new or improved write-up in `use-cases/`)
+- [ ] `.github/` template or workflow
+- [ ] Other shell content
 
-- [ ] Pattern is **battle-tested** — used in a real project, not theoretical
-- [ ] Includes **code examples** with correct/incorrect patterns
-- [ ] Has **frontmatter** (`name`, `description`, `type: reference`)
-- [ ] File is under **150 lines** (decompose if larger)
-- [ ] Anti-patterns include **why it's bad** and **the fix**
-- [ ] Does NOT duplicate existing patterns in that language's `references/universal/`
-- [ ] Tested: the pattern works with the latest version of the library/framework
+## Checklist
 
-### Where did this pattern come from?
-
-- [ ] Project-level override (`.claude/frameworks/{lang}/`) that proved useful
-- [ ] Context7 generated doc that should be curated permanently
-- [ ] Original contribution based on production experience
-- [ ] Community request / issue
-
-## New Language Checklist
-
-If adding a new language to `skills/app-architecture/`:
-
-- [ ] Created `{lang}/SKILL.md` with anti-patterns table and patterns list
-- [ ] Created `{lang}/references/universal/` directory
-- [ ] Created `{lang}/references/generated/README.md`
-- [ ] Added language to `hooks/enforcement/code-enforcement.mjs`:
-  - [ ] Extension detection
-  - [ ] Anti-pattern rules (in the `case` block)
-- [ ] Added language to master `skills/app-architecture/SKILL.md`:
-  - [ ] Framework Loading table
-  - [ ] Other Frameworks section
-- [ ] Updated `skills/initialize/` step files:
-  - [ ] `steps/01-detect-stack.md` — Stack detection files table
-  - [ ] `steps/02-extensions-skip-patterns.md` — Extensions and skip patterns table
-  - [ ] `steps/03a-context7-folders.md` — Context7 query focus table
-- [ ] Updated `README.md` language list and enforcement-rules table
-
-## Hook / Skill Checklist
-
-If modifying hooks or skills:
-
-- [ ] `code-enforcement.mjs` stays under 700 lines; `decomposition-check.sh` under 350 lines
-- [ ] Backward compatible — existing `.composure/no-bandaids.json` config without new fields still works
-- [ ] Tested with `echo '{"tool_name":"Write","tool_input":{"file_path":"test.xx","content":"..."}}' | node hooks/enforcement/code-enforcement.mjs`
-
-## Test Plan
-
-<!-- How did you verify this works? -->
-
-- [ ] Tested locally with Claude Code
-- [ ] Verified hook blocks the anti-pattern
-- [ ] Verified hook allows the correct pattern
-- [ ] Ran `/composure:initialize --force` to verify detection
+- [ ] This changes **shell content only** (not plugin/skill/hook/code — those go via an issue)
+- [ ] Links and image paths resolve
+- [ ] No secrets or personal info in the diff
+- [ ] I've read [CONTRIBUTING.md](../CONTRIBUTING.md)
