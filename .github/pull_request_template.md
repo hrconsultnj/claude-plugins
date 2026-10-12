@@ -1,9 +1,31 @@
-## What kind of contribution is this?
+## What and why
 
-- [ ] **Framework pattern** — adding/updating patterns for a language (TypeScript, Python, Go, Rust, C/C++, Swift, Kotlin)
-- [ ] **New language support** — adding a new language framework
-- [ ] **Hook improvement** — updating no-bandaids rules, decomposition checks, or other hooks
-- [ ] **Skill enhancement** — improving an existing skill
+<one or two sentences>
+
+## Checks
+
+- [ ] No automated check exists yet. Checks run by hand, and their results are below: `<command>` `<result>`
+- [ ] No secrets, tokens, `.env` values or credential output
+- [ ] The change is in the right repo (see CONTRIBUTING.md, "What belongs here")
+
+## Live impact
+
+<"none", or the plugin this changes, and which users pick it up and how>
+
+## Rollback
+
+<how to undo it>
+
+## Evidence
+
+<hook test output, skill run output, screenshots>
+
+## Contribution type
+
+- [ ] **Framework pattern**: adding/updating patterns for a language (TypeScript, Python, Go, Rust, C/C++, Swift, Kotlin)
+- [ ] **New language support**: adding a new language framework
+- [ ] **Hook improvement**: updating no-bandaids rules, decomposition checks, or other hooks
+- [ ] **Skill enhancement**: improving an existing skill
 - [ ] **Bug fix**
 - [ ] **Other** (describe below)
 
@@ -15,7 +37,7 @@
 
 If contributing patterns to `skills/app-architecture/{lang}/references/universal/`:
 
-- [ ] Pattern is **battle-tested** — used in a real project, not theoretical
+- [ ] Pattern is **battle-tested**: used in a real project, not theoretical
 - [ ] Includes **code examples** with correct/incorrect patterns
 - [ ] Has **frontmatter** (`name`, `description`, `type: reference`)
 - [ ] File is under **150 lines** (decompose if larger)
@@ -44,9 +66,9 @@ If adding a new language to `skills/app-architecture/`:
   - [ ] Framework Loading table
   - [ ] Other Frameworks section
 - [ ] Updated `skills/initialize/` step files:
-  - [ ] `steps/01-detect-stack.md` — Stack detection files table
-  - [ ] `steps/02-extensions-skip-patterns.md` — Extensions and skip patterns table
-  - [ ] `steps/03a-context7-folders.md` — Context7 query focus table
+  - [ ] `steps/01-detect-stack.md`, Stack detection files table
+  - [ ] `steps/02-extensions-skip-patterns.md`, Extensions and skip patterns table
+  - [ ] `steps/03a-context7-folders.md`, Context7 query focus table
 - [ ] Updated `README.md` language list and no-bandaids table
 
 ## Hook / Skill Checklist
@@ -54,7 +76,7 @@ If adding a new language to `skills/app-architecture/`:
 If modifying hooks or skills:
 
 - [ ] Hook stays under 200 lines (no-bandaids) or 350 lines (decomposition-check)
-- [ ] Backward compatible — existing `no-bandaids.json` without new fields still works
+- [ ] Backward compatible, existing `no-bandaids.json` without new fields still works
 - [ ] Tested with `echo '{"tool_name":"Write","tool_input":{"file_path":"test.xx","content":"..."}}' | bash hooks/no-bandaids.sh`
 
 ## Test Plan
