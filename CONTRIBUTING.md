@@ -1,7 +1,7 @@
 # Contributing to claude-plugins
 
 For people and agents. Read this whole file before your first change here.
-Shared ARC rules: [repo standard](https://github.com/arc-web/agent-config/blob/main/handbook/repo-standard.md) and [STANDARD.md](https://github.com/arc-web/agent-config/blob/main/handbook/STANDARD.md).
+Shared ARC rules: [repo standard](https://github.com/arc-web/agent-config/blob/main/CONTRIBUTING.md#rules-for-every-arc-web-repo) and [STANDARD.md](https://github.com/arc-web/agent-config/blob/main/handbook/STANDARD.md).
 
 ## At a glance
 
