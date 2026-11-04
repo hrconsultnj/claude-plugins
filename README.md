@@ -14,6 +14,15 @@ Claude writes code fast. Composure makes sure it writes it right — enforcement
 
 ## Install
 
+**Before you install, you need:**
+
+- **Node.js 22.5 or newer.** The installer stops on older versions. Check with `node --version`.
+- **`node` on your shell's PATH.** Composure's background servers start with the command `node`, so check that `command -v node` prints a path in a new terminal. Homebrew on Apple Silicon needs `eval "$(/opt/homebrew/bin/brew shellenv)"` in `~/.zprofile`.
+- **A way to run the installer.** The command below uses `pnpm`. `npx` comes with Node.js.
+- **A Composure account.** A first install stops until you've signed up, and the free tier counts: [composure-pro.com/login](https://composure-pro.com/login).
+
+`jq` is recommended. Composure's hooks use it when it's available, and skip the hook integrity check without it.
+
 One command — fresh install or update, macOS / Linux / Windows:
 
 ```bash
