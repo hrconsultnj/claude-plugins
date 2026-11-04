@@ -12,6 +12,8 @@ Claude writes code fast. Composure makes sure it writes it right — enforcement
 
 > This repository is the public home for Composure — the showcase, use-cases, and where you file issues and pull requests. The plugins are distributed as a built artifact (see Install); the source lives in a separate maintained repository.
 
+New to Composure? Start with [Onboarding](docs/onboarding.md).
+
 ## Install
 
 One command — fresh install or update, macOS / Linux / Windows:
