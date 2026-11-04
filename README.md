@@ -22,6 +22,8 @@ pnpm dlx create-composure
 
 It installs the suite, authenticates your account in the browser, and sets up `~/.composure/`. (`bunx`/`npx create-composure` also work.) Already inside Claude Code? Run `/composure:sync` to bring everything current.
 
+Installed an older version? See [Upgrading from an older install](docs/upgrade-from-older-install.md).
+
 Then initialize in any project:
 
 ```
