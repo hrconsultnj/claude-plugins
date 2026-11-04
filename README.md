@@ -72,6 +72,8 @@ Real scenarios where Composure does what vanilla Claude Code can't — full writ
 
 ## Contributing & issues
 
+Problem on your first run? Check [Checking your first run](docs/first-run-check.md) before opening an issue.
+
 Issues and pull requests are welcome here. See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODEOWNERS](CODEOWNERS).
 
 ## Licensing
