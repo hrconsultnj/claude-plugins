@@ -1,0 +1,45 @@
+name: Bug report
+description: Report a bug in an installed Composure plugin, skill or hook.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Bugs in the installed plugins are filed as issues because the plugin source is maintained separately. See [CONTRIBUTING.md](https://github.com/hrconsultnj/claude-plugins/blob/main/CONTRIBUTING.md). Remove secrets and personal information before you submit.
+  - type: input
+    id: claude-code-version
+    attributes:
+      label: Claude Code version
+      description: The output of `claude --version`.
+    validations:
+      required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      description: The version that `/composure:health` reports.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: Include the exact message or output.
+    validations:
+      required: true
