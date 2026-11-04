@@ -30,6 +30,8 @@ Then initialize in any project:
 
 Detects your stack, builds the code graph, and pulls in the companion plugins your project needs.
 
+Need to start over? See [Reinstalling from scratch](docs/reinstall-from-scratch.md).
+
 ## What's in the suite
 
 | Plugin | What it does |
